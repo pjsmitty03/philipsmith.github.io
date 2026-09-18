@@ -1,96 +1,72 @@
 fetch("updates.json")
-.then(r => {
-if (!r.ok) throw Error();
-return r.json();
-})
-.then(items => {
+  .then(r => {
+    if (!r.ok) throw Error();
+    return r.json();
+  })
+  .then(items => {
 
-```
-const c = document.getElementById("updates-container");
+    const c = document.getElementById("updates-container");
 
-items.forEach(u => {
+    items.forEach(u => {
 
-  let photos = "";
+      let photos = "";
 
-  /*
-   * New format:
-   * "images": [
-   *   {
-   *     "src": "images/updates/photo1.jpg",
-   *     "alt": "Description"
-   *   },
-   *   ...
-   * ]
-   */
+      if (u.images && Array.isArray(u.images)) {
 
-  if (u.images && Array.isArray(u.images)) {
+        photos = `
+          <div class="update-gallery">
+            ${u.images.map(img => `
+              <img
+                src="${img.src}"
+                alt="${img.alt || ""}"
+              >
+            `).join("")}
+          </div>
+        `;
 
-    photos = `
-      <div class="update-gallery">
-        ${u.images.map(img => `
-          <img
-            src="${img.src}"
-            alt="${img.alt || ""}"
-          >
-        `).join("")}
-      </div>
-    `;
+      } else if (u.image) {
 
-  }
+        photos = `
+          <div class="update-gallery">
+            <img
+              src="${u.image}"
+              alt="${u.alt || ""}"
+            >
+          </div>
+        `;
 
-  /*
-   * Old format:
-   * "image": "images/updates/photo.jpg"
-   *
-   * This keeps your existing August update working.
-   */
+      }
 
-  else if (u.image) {
+      c.innerHTML += `
+        <article class="card">
 
-    photos = `
-      <div class="update-gallery">
-        <img
-          src="${u.image}"
-          alt="${u.alt || ""}"
-        >
-      </div>
-    `;
+          ${photos}
 
-  }
+          <div>
+            <p class="date">${u.date}</p>
 
-  c.innerHTML += `
-    <article class="card">
+            <h2>${u.title}</h2>
 
-      ${photos}
+            <p>${u.text}</p>
 
-      <div>
-        <p class="date">${u.date}</p>
+            <a
+              class="text-link"
+              href="posts/001.html"
+            >
+              Read the full journal entry →
+            </a>
 
-        <h2>${u.title}</h2>
+          </div>
 
-        <p>${u.text}</p>
+        </article>
+      `;
 
-        <a
-          class="text-link"
-          href="posts/001.html"
-        >
-          Read the full journal entry →
-        </a>
+    });
 
-      </div>
+  })
+  .catch(() => {
 
-    </article>
-  `;
+    document.getElementById("updates-container").innerHTML =
+      "<p>Updates could not be loaded right now.</p>";
 
-});
-```
-
-})
-.catch(() => {
-
-```
-document.getElementById("updates-container").innerHTML =
-  "<p>Updates could not be loaded right now.</p>";
-```
-
-});
+  });
