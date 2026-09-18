@@ -1,9 +1,11 @@
 <!DOCTYPE html>
+
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Update Builder | Philip Smith</title>
+
   <style>
     body {
       margin: 0;
@@ -47,8 +49,12 @@
     }
 
     textarea {
-      min-height: 150px;
+      min-height: 170px;
       resize: vertical;
+    }
+
+    input[type="file"] {
+      padding: 10px;
     }
 
     button {
@@ -64,6 +70,11 @@
 
     button:hover {
       opacity: 0.85;
+    }
+
+    .secondary-button {
+      background: #777;
+      margin-left: 8px;
     }
 
     #result {
@@ -87,7 +98,42 @@
       color: #666;
       line-height: 1.6;
     }
+
+    .success {
+      color: #3d6848;
+      font-weight: bold;
+      margin-top: 12px;
+      display: none;
+    }
+
+    .preview {
+      margin-top: 25px;
+    }
+
+    .preview img {
+      max-width: 100%;
+      max-height: 350px;
+      display: block;
+      margin-top: 10px;
+    }
+
+    @media (max-width: 600px) {
+      h1 {
+        font-size: 34px;
+      }
+
+      button {
+        width: 100%;
+        margin-left: 0;
+        margin-right: 0;
+      }
+
+      .secondary-button {
+        margin-left: 0;
+      }
+    }
   </style>
+
 </head>
 
 <body>
@@ -98,58 +144,136 @@
 
   <p class="intro">
     Use this page to prepare a new photo update for your Kosovo journal.
-    You do not need to write any code.
+    Fill out the information below and the builder will create everything
+    you need to add the update to your website.
   </p>
 
-  <label for="title">Update title</label>
-  <input id="title" type="text" placeholder="First Week in Prishtina">
+<label for="title">Update title</label>
+<input
+id="title"
+type="text"
+placeholder="First Week in Prishtina"
 
-  <label for="date">Date</label>
-  <input id="date" type="text" placeholder="September 2026">
+>
 
-  <label for="text">Your update</label>
-  <textarea id="text" placeholder="Write a few sentences about what happened..."></textarea>
+<label for="date">Date</label>
+<input
+id="date"
+type="text"
+placeholder="September 2026"
 
-  <label for="filename">Photo filename</label>
-  <input id="filename" type="text" placeholder="first-week.jpg">
+>
 
-  <label for="alt">Photo description</label>
-  <input id="alt" type="text" placeholder="Philip at the community center">
+<label for="text">Your update</label>
 
-  <button onclick="createUpdate()">Create Update</button>
+  <textarea
+    id="text"
+    placeholder="Write a few sentences about what happened..."
+  ></textarea>
+
+<label for="filename">Photo filename</label>
+<input
+id="filename"
+type="text"
+placeholder="first-week.jpg"
+
+>
+
+  <p class="note">
+    Enter the exact filename of the photo you uploaded to
+    <strong>images/updates/</strong>.
+  </p>
+
+<label for="photo">Choose the photo from your computer</label>
+<input
+id="photo"
+type="file"
+accept="image/*"
+
+>
+
+  <div id="preview" class="preview" style="display:none;">
+    <strong>Photo preview</strong>
+    <img id="previewImage" alt="Selected photo preview">
+  </div>
+
+<label for="alt">Photo description</label>
+<input
+id="alt"
+type="text"
+placeholder="Philip and Colby outdoors"
+
+>
+
+<button onclick="createUpdate()">Create Update</button>
 
   <div id="result">
 
-    <h2>Your update is ready!</h2>
+```
+<h2>Your update is ready!</h2>
 
-    <p class="note">
-      Copy the information below into your website's update file.
-      Your photo should be uploaded to <strong>images/updates/</strong>.
-    </p>
+<p class="note">
+  Your update has been formatted to match your website.
+  First, make sure the photo has been uploaded to
+  <strong>images/updates/</strong>.
+</p>
 
-    <h3>1. Photo filename</h3>
-    <pre id="photoPath"></pre>
+<h3>Photo path</h3>
+<pre id="photoPath"></pre>
 
-    <h3>2. New update entry</h3>
-    <pre id="jsonOutput"></pre>
+<h3>New update entry</h3>
+<pre id="jsonOutput"></pre>
 
-    <p class="note">
-      We'll make this even easier in the next step so you won't have
-      to copy JSON manually either.
-    </p>
+<button onclick="copyUpdate()">Copy Update</button>
+
+<button
+  class="secondary-button"
+  onclick="copyPhotoPath()"
+>
+  Copy Photo Path
+</button>
+
+<p id="copyMessage" class="success">
+  Copied!
+</p>
+
+<h3>Final steps</h3>
+
+<p class="note">
+  1. Upload your photo to <strong>images/updates/</strong> in GitHub.
+  <br><br>
+  2. Open <strong>updates.json</strong>.
+  <br><br>
+  3. Add the copied update inside the existing array.
+  <br><br>
+  4. Commit your changes.
+  <br><br>
+  5. Your new update should appear on the Updates page.
+</p>
+```
 
   </div>
 
 </div>
 
 <script>
+
 function createUpdate() {
 
-  const title = document.getElementById("title").value.trim();
-  const date = document.getElementById("date").value.trim();
-  const text = document.getElementById("text").value.trim();
-  const filename = document.getElementById("filename").value.trim();
-  const alt = document.getElementById("alt").value.trim();
+  const title =
+    document.getElementById("title").value.trim();
+
+  const date =
+    document.getElementById("date").value.trim();
+
+  const text =
+    document.getElementById("text").value.trim();
+
+  const filename =
+    document.getElementById("filename").value.trim();
+
+  const alt =
+    document.getElementById("alt").value.trim();
 
   if (!title || !date || !text || !filename || !alt) {
     alert("Please fill in every field.");
@@ -170,9 +294,92 @@ function createUpdate() {
   document.getElementById("jsonOutput").textContent =
     JSON.stringify(update, null, 2);
 
-  document.getElementById("result").style.display = "block";
+  document.getElementById("result").style.display =
+    "block";
+
+  document.getElementById("result").scrollIntoView({
+    behavior: "smooth"
+  });
 }
+
+
+function copyUpdate() {
+
+  const text =
+    document.getElementById("jsonOutput").textContent;
+
+  navigator.clipboard.writeText(text).then(function() {
+
+    const message =
+      document.getElementById("copyMessage");
+
+    message.textContent =
+      "Update copied to your clipboard!";
+
+    message.style.display =
+      "block";
+
+  });
+
+}
+
+
+function copyPhotoPath() {
+
+  const text =
+    document.getElementById("photoPath").textContent;
+
+  navigator.clipboard.writeText(text).then(function() {
+
+    const message =
+      document.getElementById("copyMessage");
+
+    message.textContent =
+      "Photo path copied!";
+
+    message.style.display =
+      "block";
+
+  });
+
+}
+
+
+document.getElementById("photo").addEventListener(
+  "change",
+  function(event) {
+
+    const file =
+      event.target.files[0];
+
+    if (!file) {
+      return;
+    }
+
+    const preview =
+      document.getElementById("preview");
+
+    const image =
+      document.getElementById("previewImage");
+
+    image.src =
+      URL.createObjectURL(file);
+
+    preview.style.display =
+      "block";
+
+    if (!document.getElementById("filename").value) {
+
+      document.getElementById("filename").value =
+        file.name;
+
+    }
+
+  }
+);
+
 </script>
 
 </body>
 </html>
+
