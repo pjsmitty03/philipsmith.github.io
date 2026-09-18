@@ -1,72 +1,56 @@
 fetch("updates.json")
-  .then(r => {
-    if (!r.ok) throw Error();
-    return r.json();
+  .then(function(response) {
+    if (!response.ok) {
+      throw new Error("Could not load updates.json");
+    }
+    return response.json();
   })
-  .then(items => {
+  .then(function(items) {
 
-    const c = document.getElementById("updates-container");
+    var container = document.getElementById("updates-container");
 
-    items.forEach(u => {
+    items.forEach(function(update) {
 
-      let photos = "";
+      var photosHTML = "";
 
-      if (u.images && Array.isArray(u.images)) {
+      if (update.images && Array.isArray(update.images)) {
 
-        photos = `
-          <div class="update-gallery">
-            ${u.images.map(img => `
-              <img
-                src="${img.src}"
-                alt="${img.alt || ""}"
-              >
-            `).join("")}
-          </div>
-        `;
+        update.images.forEach(function(photo) {
+          photosHTML +=
+            '<img src="' + photo.src + '" alt="' + (photo.alt || "") + '">';
+        });
 
-      } else if (u.image) {
+      } else if (update.image) {
 
-        photos = `
-          <div class="update-gallery">
-            <img
-              src="${u.image}"
-              alt="${u.alt || ""}"
-            >
-          </div>
-        `;
+        photosHTML =
+          '<img src="' + update.image + '" alt="' + (update.alt || "") + '">';
 
       }
 
-      c.innerHTML += `
-        <article class="card">
+      container.innerHTML +=
+        '<article class="card">' +
 
-          ${photos}
+          '<div class="update-gallery">' +
+            photosHTML +
+          '</div>' +
 
-          <div>
-            <p class="date">${u.date}</p>
+          '<div>' +
+            '<p class="date">' + update.date + '</p>' +
+            '<h2>' + update.title + '</h2>' +
+            '<p>' + update.text + '</p>' +
+            '<a class="text-link" href="posts/001.html">Read the full journal entry →</a>' +
+          '</div>' +
 
-            <h2>${u.title}</h2>
-
-            <p>${u.text}</p>
-
-            <a
-              class="text-link"
-              href="posts/001.html"
-            >
-              Read the full journal entry →
-            </a>
-
-          </div>
-
-        </article>
-      `;
+        '</article>';
 
     });
 
   })
-  .catch(() => {
+  .catch(function(error) {
 
     document.getElementById("updates-container").innerHTML =
       "<p>Updates could not be loaded right now.</p>";
+
+    console.error(error);
 
   });
