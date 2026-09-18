@@ -1,1 +1,24 @@
-[{"date":"August 2026","title":"Preparing for Prishtina","text":"After what feels like a year of preparation, I am finally on my way to Prishtina. I am excited for the opportunity God has laid before me and for the chance to serve alongside my friend Colby.","image":"images/updates/august-prep.png","alt":"Philip Smith and Colby outdoors"}]
+[
+  {
+    "date": "August 2026",
+    "title": "Preparing for Prishtina",
+    "text": "After what feels like a year of preparation, I am finally on my way to Prishtina. I am excited for the opportunity God has laid before me and for the chance to serve alongside my friend Colby.",
+    "image": "images/updates/august-prep.png",
+    "alt": "Philip Smith and Colby outdoors"
+  },
+  {
+    "date": "August 31, 2026",
+    "title": "Arrived in Prishtina!",
+    "text": "After months of preparation, prayer, and generous support from people who care deeply about me, I finally arrived! Colby and I were blessed with smooth travel, and even got to sit a row apart from his sister and her four children on the flight over from the States. When we arrived, Rob and Heidi, the host missionaries welcomed us at the airport, as well as Colby's brother in law- who brought us some traditional food Gjakova, his hometown- Samun me suxjuk. I am so excited to keep everyone updated on my journey!",
+    "images": [
+      {
+        "src": "images/updates/Arrivalphoto.JPG",
+        "alt": "Colby and I with Heidi and Rob in the airport!"
+      },
+      {
+        "src": "images/updates/samunpic.HEIC",
+        "alt": "Enjoying our Samun me suxjuk in the airport parking lot!"
+      }
+    ]
+  }
+]
