@@ -106,15 +106,36 @@
       display: none;
     }
 
-    .preview {
-      margin-top: 25px;
+    .photo-list {
+      margin-top: 20px;
     }
 
-    .preview img {
-      max-width: 100%;
-      max-height: 350px;
-      display: block;
-      margin-top: 10px;
+    .photo-item {
+      display: flex;
+      gap: 15px;
+      align-items: flex-start;
+      padding: 15px 0;
+      border-bottom: 1px solid #ddd;
+    }
+
+    .photo-item img {
+      width: 120px;
+      height: 90px;
+      object-fit: cover;
+      flex-shrink: 0;
+    }
+
+    .photo-details {
+      flex: 1;
+    }
+
+    .photo-details input {
+      margin-bottom: 8px;
+    }
+
+    .photo-number {
+      font-weight: bold;
+      margin-bottom: 8px;
     }
 
     @media (max-width: 600px) {
@@ -131,6 +152,16 @@
       .secondary-button {
         margin-left: 0;
       }
+
+      .photo-item {
+        flex-direction: column;
+      }
+
+      .photo-item img {
+        width: 100%;
+        height: auto;
+        max-height: 300px;
+      }
     }
   </style>
 
@@ -144,8 +175,7 @@
 
   <p class="intro">
     Use this page to prepare a new photo update for your Kosovo journal.
-    Fill out the information below and the builder will create everything
-    you need to add the update to your website.
+    You can now add multiple photos to one update.
   </p>
 
 <label for="title">Update title</label>
@@ -171,39 +201,22 @@ placeholder="September 2026"
     placeholder="Write a few sentences about what happened..."
   ></textarea>
 
-<label for="filename">Photo filename</label>
+<label for="photos">Choose your photos</label>
+
 <input
-id="filename"
-type="text"
-placeholder="first-week.jpg"
+id="photos"
+type="file"
+accept="image/*"
+multiple
 
 >
 
   <p class="note">
-    Enter the exact filename of the photo you uploaded to
-    <strong>images/updates/</strong>.
+    You can select multiple photos at once. Make sure these same photos
+    are uploaded to <strong>images/updates/</strong> in GitHub.
   </p>
 
-<label for="photo">Choose the photo from your computer</label>
-<input
-id="photo"
-type="file"
-accept="image/*"
-
->
-
-  <div id="preview" class="preview" style="display:none;">
-    <strong>Photo preview</strong>
-    <img id="previewImage" alt="Selected photo preview">
-  </div>
-
-<label for="alt">Photo description</label>
-<input
-id="alt"
-type="text"
-placeholder="Philip and Colby outdoors"
-
->
+  <div id="photoList" class="photo-list"></div>
 
 <button onclick="createUpdate()">Create Update</button>
 
@@ -213,13 +226,13 @@ placeholder="Philip and Colby outdoors"
 <h2>Your update is ready!</h2>
 
 <p class="note">
-  Your update has been formatted to match your website.
-  First, make sure the photo has been uploaded to
-  <strong>images/updates/</strong>.
+  Upload all of your selected photos to
+  <strong>images/updates/</strong> in GitHub first.
+  Then copy the update below into <strong>updates.json</strong>.
 </p>
 
-<h3>Photo path</h3>
-<pre id="photoPath"></pre>
+<h3>Photo paths</h3>
+<pre id="photoPaths"></pre>
 
 <h3>New update entry</h3>
 <pre id="jsonOutput"></pre>
@@ -228,9 +241,9 @@ placeholder="Philip and Colby outdoors"
 
 <button
   class="secondary-button"
-  onclick="copyPhotoPath()"
+  onclick="copyPhotoPaths()"
 >
-  Copy Photo Path
+  Copy Photo Paths
 </button>
 
 <p id="copyMessage" class="success">
@@ -240,7 +253,7 @@ placeholder="Philip and Colby outdoors"
 <h3>Final steps</h3>
 
 <p class="note">
-  1. Upload your photo to <strong>images/updates/</strong> in GitHub.
+  1. Upload all of your photos to <strong>images/updates/</strong>.
   <br><br>
   2. Open <strong>updates.json</strong>.
   <br><br>
@@ -248,7 +261,8 @@ placeholder="Philip and Colby outdoors"
   <br><br>
   4. Commit your changes.
   <br><br>
-  5. Your new update should appear on the Updates page.
+  5. Your new update will appear on the Updates page once we update
+  <strong>updates.js</strong> to support multiple photos.
 </p>
 ```
 
@@ -257,6 +271,81 @@ placeholder="Philip and Colby outdoors"
 </div>
 
 <script>
+
+let selectedPhotos = [];
+
+
+document.getElementById("photos").addEventListener(
+  "change",
+  function(event) {
+
+    selectedPhotos = Array.from(event.target.files);
+
+    const photoList =
+      document.getElementById("photoList");
+
+    photoList.innerHTML = "";
+
+    selectedPhotos.forEach(function(file, index) {
+
+      const item =
+        document.createElement("div");
+
+      item.className =
+        "photo-item";
+
+      const image =
+        document.createElement("img");
+
+      image.src =
+        URL.createObjectURL(file);
+
+      image.alt =
+        "Preview of " + file.name;
+
+      const details =
+        document.createElement("div");
+
+      details.className =
+        "photo-details";
+
+      const number =
+        document.createElement("div");
+
+      number.className =
+        "photo-number";
+
+      number.textContent =
+        "Photo " + (index + 1) + ": " + file.name;
+
+      const altInput =
+        document.createElement("input");
+
+      altInput.type =
+        "text";
+
+      altInput.className =
+        "alt-input";
+
+      altInput.placeholder =
+        "Photo description";
+
+      altInput.dataset.index =
+        index;
+
+      details.appendChild(number);
+      details.appendChild(altInput);
+
+      item.appendChild(image);
+      item.appendChild(details);
+
+      photoList.appendChild(item);
+
+    });
+
+  }
+);
+
 
 function createUpdate() {
 
@@ -269,27 +358,46 @@ function createUpdate() {
   const text =
     document.getElementById("text").value.trim();
 
-  const filename =
-    document.getElementById("filename").value.trim();
-
-  const alt =
-    document.getElementById("alt").value.trim();
-
-  if (!title || !date || !text || !filename || !alt) {
-    alert("Please fill in every field.");
+  if (!title || !date || !text) {
+    alert("Please fill in the title, date, and update.");
     return;
   }
+
+  if (selectedPhotos.length === 0) {
+    alert("Please choose at least one photo.");
+    return;
+  }
+
+  const altInputs =
+    document.querySelectorAll(".alt-input");
+
+  const images =
+    selectedPhotos.map(function(file, index) {
+
+      const description =
+        altInputs[index].value.trim();
+
+      return {
+        src: "images/updates/" + file.name,
+        alt: description || file.name
+      };
+
+    });
 
   const update = {
     date: date,
     title: title,
     text: text,
-    image: "images/updates/" + filename,
-    alt: alt
+    images: images
   };
 
-  document.getElementById("photoPath").textContent =
-    "images/updates/" + filename;
+  const paths =
+    images.map(function(image) {
+      return image.src;
+    }).join("\n");
+
+  document.getElementById("photoPaths").textContent =
+    paths;
 
   document.getElementById("jsonOutput").textContent =
     JSON.stringify(update, null, 2);
@@ -300,6 +408,7 @@ function createUpdate() {
   document.getElementById("result").scrollIntoView({
     behavior: "smooth"
   });
+
 }
 
 
@@ -324,10 +433,10 @@ function copyUpdate() {
 }
 
 
-function copyPhotoPath() {
+function copyPhotoPaths() {
 
   const text =
-    document.getElementById("photoPath").textContent;
+    document.getElementById("photoPaths").textContent;
 
   navigator.clipboard.writeText(text).then(function() {
 
@@ -335,7 +444,7 @@ function copyPhotoPath() {
       document.getElementById("copyMessage");
 
     message.textContent =
-      "Photo path copied!";
+      "Photo paths copied!";
 
     message.style.display =
       "block";
@@ -344,42 +453,7 @@ function copyPhotoPath() {
 
 }
 
-
-document.getElementById("photo").addEventListener(
-  "change",
-  function(event) {
-
-    const file =
-      event.target.files[0];
-
-    if (!file) {
-      return;
-    }
-
-    const preview =
-      document.getElementById("preview");
-
-    const image =
-      document.getElementById("previewImage");
-
-    image.src =
-      URL.createObjectURL(file);
-
-    preview.style.display =
-      "block";
-
-    if (!document.getElementById("filename").value) {
-
-      document.getElementById("filename").value =
-        file.name;
-
-    }
-
-  }
-);
-
 </script>
 
 </body>
 </html>
-
