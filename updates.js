@@ -9,7 +9,8 @@ fetch("updates.json")
 
     var container = document.getElementById("updates-container");
 
-    items.forEach(function(update) {
+    // Show newest updates first
+    items.slice().reverse().forEach(function(update) {
 
       var photosHTML = "";
 
