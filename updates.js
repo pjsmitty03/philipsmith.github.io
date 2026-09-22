@@ -9,22 +9,38 @@ fetch("updates.json")
 
     var container = document.getElementById("updates-container");
 
-    // Show newest updates first
-    items.slice().reverse().forEach(function(update) {
+    // Sort updates from newest to oldest
+    items.sort(function(a, b) {
+      return new Date(b.date) - new Date(a.date);
+    });
+
+    items.forEach(function(update) {
 
       var photosHTML = "";
 
+      // Multiple photos
       if (update.images && Array.isArray(update.images)) {
 
         update.images.forEach(function(photo) {
           photosHTML +=
-            '<img src="' + photo.src + '" alt="' + (photo.alt || "") + '">';
+            '<img src="' +
+            photo.src +
+            '" alt="' +
+            (photo.alt || "") +
+            '">';
         });
 
-      } else if (update.image) {
+      }
+
+      // Older single-photo format
+      else if (update.image) {
 
         photosHTML =
-          '<img src="' + update.image + '" alt="' + (update.alt || "") + '">';
+          '<img src="' +
+          update.image +
+          '" alt="' +
+          (update.alt || "") +
+          '">';
 
       }
 
@@ -37,9 +53,15 @@ fetch("updates.json")
 
           '<div>' +
             '<p class="date">' + update.date + '</p>' +
-            '<h2>' + update.title + '</h2>' +
-            '<p>' + update.text + '</p>' +
-            '<a class="text-link" href="posts/001.html">Read the full journal entry →</a>' +
+
+            '<h2>' +
+              update.title +
+            '</h2>' +
+
+            '<p>' +
+              update.text +
+            '</p>' +
+
           '</div>' +
 
         '</article>';
