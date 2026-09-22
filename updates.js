@@ -9,16 +9,13 @@ fetch("updates.json")
 
     var container = document.getElementById("updates-container");
 
-    // Sort updates from newest to oldest
-    items.sort(function(a, b) {
-      return new Date(b.date) - new Date(a.date);
-    });
+    // Reverse the order so the newest entry is displayed first
+    var updates = items.slice().reverse();
 
-    items.forEach(function(update) {
+    updates.forEach(function(update) {
 
       var photosHTML = "";
 
-      // Multiple photos
       if (update.images && Array.isArray(update.images)) {
 
         update.images.forEach(function(photo) {
@@ -30,10 +27,7 @@ fetch("updates.json")
             '">';
         });
 
-      }
-
-      // Older single-photo format
-      else if (update.image) {
+      } else if (update.image) {
 
         photosHTML =
           '<img src="' +
@@ -52,7 +46,10 @@ fetch("updates.json")
           '</div>' +
 
           '<div>' +
-            '<p class="date">' + update.date + '</p>' +
+
+            '<p class="date">' +
+              update.date +
+            '</p>' +
 
             '<h2>' +
               update.title +
