@@ -9,13 +9,14 @@ fetch("updates.json")
 
     var container = document.getElementById("updates-container");
 
-    // Reverse the order so the newest entry is displayed first
-    var updates = items.slice().reverse();
+    // Newest update first
+    items.reverse();
 
-    updates.forEach(function(update) {
+    items.forEach(function(update) {
 
       var photosHTML = "";
 
+      // Multiple photos
       if (update.images && Array.isArray(update.images)) {
 
         update.images.forEach(function(photo) {
@@ -27,7 +28,10 @@ fetch("updates.json")
             '">';
         });
 
-      } else if (update.image) {
+      }
+
+      // Single photo
+      else if (update.image) {
 
         photosHTML =
           '<img src="' +
