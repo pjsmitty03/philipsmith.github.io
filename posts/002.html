@@ -11,7 +11,9 @@
   <link rel="stylesheet" href="https://pjsmitty03.github.io/philipsmith.github.io/style.css">
   <style>
     .photo { margin: 45px 0; }
-    .photo img { display: block; width: auto; max-width: 100%; height: auto; max-height: min(75vw, 520px); margin: 0 auto; }
+    .photo.portrait { max-width: 340px; margin-left: auto; margin-right: auto; }
+    .photo.portrait.narrow { max-width: 280px; }
+    .photo img { display: block; width: 100% !important; height: auto !important; max-height: none !important; }
     .photo figcaption { margin-top: 10px; text-align: center; font: 13px "DM Sans", sans-serif; color: #777; }
     .journal-quote { margin: 65px 0; padding: 45px 25px; border-top: 1px solid #d8d2c8; border-bottom: 1px solid #d8d2c8; text-align: center; font: italic 32px/1.35 "Playfair Display", serif; }
     .journal-quote small { display: block; margin-top: 18px; font: 12px "DM Sans", sans-serif; letter-spacing: .12em; text-transform: uppercase; }
@@ -27,7 +29,9 @@
       * { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
       .photo, .journal-quote, .scripture, li { break-inside: avoid; }
       h1, h2 { break-after: avoid; }
-      .photo img { max-height: 5in; width: auto; max-width: 100%; margin: 0 auto; object-fit: contain; }
+      .photo { max-width: 6in; margin-left: auto; margin-right: auto; }
+      .photo.portrait { max-width: 3in; }
+      .photo.portrait.narrow { max-width: 2.4in; }
     }
   </style>
 </head>
@@ -82,7 +86,7 @@
     <p>Still, the country is majority Muslim, which has been an adjustment—Mosques are all over the city, and you can hear imams over loudspeakers, reciting the Adhan (call to prayer) pretty much any place in the city.</p>
 
     <!-- PHOTO 3 -->
-    <figure class="photo">
+    <figure class="photo portrait">
       <img src="images/002/03-bakery.jpg" alt="A baker sliding flatbreads into a brick oven at a Prishtina bakery">
     </figure>
 
@@ -100,7 +104,7 @@
     <p>Elsewhere, Colby and I—alongside another missionary named Nathan, are getting to run the Youth Group at the church we attend! This is such a cool opportunity, and we feel really thankful for the experience that we gained from leading Young Life in college. I am excited to be challenged and grow through real-time ministry experience in this!</p>
 
     <!-- PHOTO 5 -->
-    <figure class="photo">
+    <figure class="photo portrait">
       <img src="images/002/04-volleyball.jpg" alt="Kids playing volleyball outdoors in the late afternoon sun">
     </figure>
 
@@ -114,7 +118,7 @@
     </ul>
 
     <!-- PHOTO 6 -->
-    <figure class="photo">
+    <figure class="photo portrait">
       <img src="images/002/02-community-meal.jpg" alt="A crowded community meal with kids and adults gathered around tables">
     </figure>
 
@@ -143,7 +147,7 @@
     <p>It was certainly a challenge for me at first, having grown up with financial stability, two loving parents, and a community around me at JMU that was incredibly supportive and life-giving. How was I supposed to relate to these kids, or share the gospel in a way that speaks to their circumstances, when I don’t even understand their circumstances?</p>
 
     <!-- PHOTO 8 -->
-    <figure class="photo">
+    <figure class="photo portrait">
       <img src="images/002/08-prishtina-sunset.jpg" alt="Evening light on a red apartment building overlooking Prishtina">
     </figure>
 
@@ -169,7 +173,7 @@
     </div>
 
     <!-- PHOTO 9 -->
-    <figure class="photo">
+    <figure class="photo portrait narrow">
       <img src="images/002/09-fireworks.jpg" alt="Fireworks and a disco ball seen through the steel ceiling beams at the wedding venue">
     </figure>
 
