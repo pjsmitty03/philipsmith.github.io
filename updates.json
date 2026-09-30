@@ -16,9 +16,16 @@
         "alt": "Colby and I with Heidi and Rob in the airport!"
       },
       {
-        "src": "images/updates/samunpic.HEIC",
+        "src": "images/updates/samunpic.jpg",
         "alt": "Enjoying our Samun me suxjuk in the airport parking lot!"
       }
     ]
+  },
+  {
+    "date": "September 2026",
+    "title": "Learning to Listen",
+    "text": "My first month in Prishtina has been full of teaching, new relationships, cultural experiences, ministry opportunities, and learning how to listen.<br><br><a class=\"text-link\" href=\"posts/002.html\">Read the full journal entry →</a>",
+    "image": "posts/images/002/01-classroom-intro.jpg",
+    "alt": "Colby and Philip teaching a first-day English class in Prishtina"
   }
 ]
